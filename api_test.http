@@ -1,0 +1,36 @@
+GET {{url}}
+
+###
+GET {{url}}/all
+
+###
+POST {{url}}/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "user1@email.com",
+  "password": "password"
+}
+
+
+> {%
+  auth_token = response.body['auth_token']
+  client.global.set("token", auth_token)
+%}
+
+###
+GET http://{{url}}/users/1
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+> {%
+ client.test("Get User", function() {
+   client.assert(response.body['books_count'] === 5, "Books count returned is wrong")
+ })
+
+ client.test("Status", function() {
+   client.assert(response.status === 200, "Response status is not 200")
+ })
+ %}

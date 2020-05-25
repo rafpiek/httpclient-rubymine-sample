@@ -20,16 +20,16 @@ class ApplicationController < ActionController::API
         auth_token: FAKE_TOKEN,
       }, status: :ok
     else
-      render json: { error: :unathorized }, status: :unathorized
+      render json: { error: :unauthorized }, status: :unauthorized
     end
   end
 
   private
   def authenticate
-    if request.headers['Authentication'] && request.headers['Authentication'].split(' ').last.eql?(FAKE_TOKEN)
+    if request.headers['Authorization'] && request.headers['Authorization'].split(' ').last.eql?(FAKE_TOKEN)
       return
     else
-      render json: { error: :unathorized }, status: :unauthorized
+      render json: { error: :unauthorized }, status: :unauthorized
     end
   end
 end
